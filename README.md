@@ -24,25 +24,21 @@ This script calculates Key Risk Indicators (KRIs) for IT systems based on incide
 
 ## 2. Calculation Methodology
 
-### KRI1: Mean Time Between Critical System Failures (MTBF)
-- **Definition:** Average number of days between two consecutive incidents for each system.
-- **Threshold:** 90 days (breach if MTBF < 90 days).
-- **Calculation:** For each system, calculate the days between each pair of consecutive incidents, then average these values.
+### KRI1: MTBF (Mean Time Between Failures)
+- For each system, incidents are sorted by start time.
+- MTBF is calculated as the average number of days between consecutive incidents.
+- If a system has fewer than 2 incidents, MTBF is marked as "N/A".
+- If MTBF is below the threshold (default: 90 days), status is "Breach"; otherwise, "OK".
 
-### KRI2: Number of Incidents Affecting Critical Applications (Monthly)
-- **Definition:** Number of incidents per system per month.
-- **Threshold:** 3 incidents per month (breach if count > 3).
-- **Calculation:** Count the number of incidents for each system in each month.
+### KRI2: Monthly Incident Count
+- For each system, the total number of incidents is counted (across all months).
+- If the count exceeds the threshold (default: 3), status is "Breach"; otherwise, "OK".
 
-### KRI3: Number of Incidents Resulting in Downtime Exceeding RTO
-- **Definition:** Number of incidents where downtime exceeds the Recovery Time Objective (RTO).
-- **Threshold:** 0 (breach if any incident exceeds RTO).
-- **Calculation:** Count incidents per system where duration > 120 minutes (2 hours).
-
-### KRI4: Number of Incidents Resulting in Downtime Within RTO
-- **Definition:** Number of incidents where downtime is within the RTO.
-- **Threshold:** 3 (breach if count > 3).
-- **Calculation:** Count incidents per system where duration <= 120 minutes.
+### KRI3 & KRI4: RTO (Recovery Time Objective) Analysis
+- For each incident, if duration > RTO threshold (default: 120 minutes), it is counted as "Exceeded RTO"; otherwise, "Within RTO".
+- For each system:
+  - If any incident exceeded RTO, "Exceed Status" is "Breach".
+  - If more than 3 incidents are within RTO, "Within Status" is "Breach".
 
 ---
 
@@ -54,10 +50,10 @@ This script calculates Key Risk Indicators (KRIs) for IT systems based on incide
    ```bash
    python KRI_calculator.py
    ```
-3. The script will output `KRI_FINAL_RESULTS.xlsx` with three sheets:
-   - `KRI1 - MTBF`
-   - `KRI2 - Monthly`
-   - `KRI3-KRI4 - RTO`
+3. The script will:
+   - Print loading and calculation logs to the terminal.
+   - Generate an output Excel file named `KRI_FINAL_RESULTS.xlsx` in the same directory.
+
 
 ### Input File Format
 - Sheet name: `incident_data`
@@ -75,5 +71,7 @@ This script calculates Key Risk Indicators (KRIs) for IT systems based on incide
 ---
 
 ## Troubleshooting
-- If the output file is empty, check the console for errors or data loading issues.
-- Ensure date formats in your Excel file match the expected format: `MM/DD/YY HH:MM:SS AM/PM`. 
+- Permission Denied Error: Close the output Excel file before running the script again.
+- No Data Loaded: Check that your input file matches the expected format and worksheet name.
+- Ensure date formats in your Excel file match the expected format: `MM/DD/YY HH:MM:SS AM/PM`.
+- Unexpected Results: Review the printed logs for errors or warnings.
