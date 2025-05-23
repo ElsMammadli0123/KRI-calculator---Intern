@@ -1,6 +1,6 @@
 """
-KRI CALCULATION SCRIPT (DEBUGGED & FULLY FUNCTIONAL)
-Author: [Your Name]
+KRI CALCULATION SCRIPT 
+
 """
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import PatternFill, Font
@@ -18,7 +18,7 @@ RED_FILL = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="soli
 HEADER_FONT = Font(bold=True)
 
 # =====================
-#  DATA LOADING (WITH DEBUGGING)
+#  DATA LOADING 
 # =====================
 def load_data():
     """Loads data with detailed error logging and collects all system names."""
